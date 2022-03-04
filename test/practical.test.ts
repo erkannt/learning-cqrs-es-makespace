@@ -11,7 +11,35 @@ describe('practical', () => {
     });
 
     describe('and the practical has no free spaces left', () => {
-      it.todo('returns no events');
+      const practicalId = 'foo';
+      const command = {
+        _type: 'JoinPractical' as const,
+        memberNumber: 123,
+        practicalId,
+      };
+      const history = [
+        {
+          _type: 'PracticalScheduled' as const,
+          id: practicalId,
+          capacity: 2,
+        },
+        {
+          _type: 'MemberSignedUpForPractical' as const,
+          memberNumber: 456,
+          practicalId,
+        },
+        {
+          _type: 'MemberSignedUpForPractical' as const,
+          memberNumber: 789,
+          practicalId,
+        },
+      ];
+
+      const result = practical(history)(command);
+
+      it('returns no events', () => {
+        expect(result).toStrictEqual([]);
+      });
     });
 
     describe('and the practical does not exist', () => {

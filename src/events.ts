@@ -1,7 +1,12 @@
-type CompletedOnlineTraining = {
-  _type: 'CompletedOnlineTraining';
-  memberNumber: number;
-  trainingId: string;
+type PracticalScheduled = {
+  _type: 'PracticalScheduled';
+  capacity: number;
 };
 
-export type Event = CompletedOnlineTraining;
+type MemberSignedUpForPractical = {
+  _type: 'MemberSignedUpForPractical';
+  memberNumber: number;
+  practicalId: string;
+};
+
+export type Event = PracticalScheduled | MemberSignedUpForPractical;
