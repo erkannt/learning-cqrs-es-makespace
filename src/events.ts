@@ -1,6 +1,7 @@
 type PracticalScheduled = {
   _type: 'PracticalScheduled';
   capacity: number;
+  date: Date;
 };
 
 type MemberSignedUpForPractical = {
