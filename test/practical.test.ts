@@ -1,3 +1,4 @@
+import {MemberNumber} from './../src/types';
 import {practical} from '../src/practical';
 import {faker} from '@faker-js/faker';
 
@@ -7,7 +8,7 @@ describe('practical', () => {
     const memberNumber = 123;
     const command = {
       _type: 'JoinPractical' as const,
-      memberNumber: 123,
+      memberNumber: 123 as MemberNumber,
       practicalId,
     };
 
