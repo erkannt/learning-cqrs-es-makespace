@@ -11,7 +11,7 @@
   "keywords": [],
   "scripts": {
     "start": "ts-node-dev --project tsconfig.json --transpile-only --watch src ./src/index.ts",
-    "test": "ts-jest",
+    "test": "jest",
     "lint": "gts lint",
     "clean": "gts clean",
     "compile": "tsc",
