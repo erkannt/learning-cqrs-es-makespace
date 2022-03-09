@@ -1,14 +1,14 @@
-import {MemberNumber} from './types';
+import {MemberNumber, PracticalId} from './types';
 
 type PracticalScheduled = {
   _type: 'PracticalScheduled';
   capacity: number;
   date: Date;
-  id: string;
+  id: PracticalId;
 };
 
 export const practicalScheduled = (
-  practicalId: string,
+  practicalId: PracticalId,
   capacity: number,
   date: Date
 ): PracticalScheduled => ({
