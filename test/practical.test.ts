@@ -1,6 +1,7 @@
 import {MemberNumber} from './../src/types';
 import {practical} from '../src/practical';
 import {faker} from '@faker-js/faker';
+import {practicalScheduled} from '../src/events';
 
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {
@@ -13,14 +14,7 @@ describe('practical', () => {
     };
 
     describe('and the practical is in the future and has slots available', () => {
-      const history = [
-        {
-          _type: 'PracticalScheduled' as const,
-          id: practicalId,
-          capacity: 2,
-          date: faker.date.future(),
-        },
-      ];
+      const history = [practicalScheduled(practicalId, 2, faker.date.future())];
       const result = practical(history)(command);
 
       it.skip('returns a MemberSignedUpForPractical event', () => {
@@ -33,14 +27,7 @@ describe('practical', () => {
     });
 
     describe('and the practical is in the past', () => {
-      const history = [
-        {
-          _type: 'PracticalScheduled' as const,
-          id: practicalId,
-          capacity: 2,
-          date: faker.date.past(),
-        },
-      ];
+      const history = [practicalScheduled(practicalId, 2, faker.date.past())];
       const result = practical(history)(command);
 
       it('returns no events', () => {
@@ -50,12 +37,7 @@ describe('practical', () => {
 
     describe('and the practical has no free spaces left', () => {
       const history = [
-        {
-          _type: 'PracticalScheduled' as const,
-          id: practicalId,
-          capacity: 2,
-          date: faker.date.future(),
-        },
+        practicalScheduled(practicalId, 2, faker.date.future()),
         {
           _type: 'MemberSignedUpForPractical' as const,
           memberNumber: 456,
