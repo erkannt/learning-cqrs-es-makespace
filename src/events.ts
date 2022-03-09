@@ -1,11 +1,15 @@
-import {MemberNumber, PracticalId} from './types';
+import {MemberNumber, PracticalId, PracticalIdCodec} from './types';
+import * as t from 'io-ts';
+import * as tt from 'io-ts-types';
 
-type PracticalScheduled = {
-  _type: 'PracticalScheduled';
-  capacity: number;
-  date: Date;
-  id: PracticalId;
-};
+export const PracticalScheduledCodec = t.type({
+  _type: t.literal('PracticalScheduled'),
+  capacity: t.number,
+  date: tt.DateFromISOString,
+  id: PracticalIdCodec,
+});
+
+export type PracticalScheduled = t.TypeOf<typeof PracticalScheduledCodec>;
 
 export const practicalScheduled = (
   practicalId: PracticalId,
