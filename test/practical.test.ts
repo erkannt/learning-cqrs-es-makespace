@@ -1,4 +1,4 @@
-import {MemberNumber} from './../src/types';
+import {arbitraryMemberNumber} from './../src/types';
 import {practical} from '../src/practical';
 import {faker} from '@faker-js/faker';
 import {memberSignedUpForPractical, practicalScheduled} from '../src/events';
@@ -7,8 +7,8 @@ import {joinPractical} from '../src/commands';
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {
     const practicalId = 'foo';
-    const memberNumber = 123 as MemberNumber;
-    const command = joinPractical(123 as MemberNumber, practicalId);
+    const memberNumber = arbitraryMemberNumber();
+    const command = joinPractical(arbitraryMemberNumber(), practicalId);
 
     describe('and the practical is in the future and has slots available', () => {
       const history = [practicalScheduled(practicalId, 2, faker.date.future())];
@@ -33,8 +33,8 @@ describe('practical', () => {
     describe('and the practical has no free spaces left', () => {
       const history = [
         practicalScheduled(practicalId, 2, faker.date.future()),
-        memberSignedUpForPractical(456 as MemberNumber, practicalId),
-        memberSignedUpForPractical(789 as MemberNumber, practicalId),
+        memberSignedUpForPractical(arbitraryMemberNumber(), practicalId),
+        memberSignedUpForPractical(arbitraryMemberNumber(), practicalId),
       ];
 
       const result = practical(history)(command);

@@ -1,3 +1,4 @@
+import faker from '@faker-js/faker';
 import * as t from 'io-ts';
 
 type MemberNumberBrand = {
@@ -11,3 +12,6 @@ export const MemberNumberCodec = t.brand(
 );
 
 export type MemberNumber = t.TypeOf<typeof MemberNumberCodec>;
+
+export const arbitraryMemberNumber = (): MemberNumber =>
+  faker.datatype.number() as MemberNumber;
