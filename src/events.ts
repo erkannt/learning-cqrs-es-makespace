@@ -1,4 +1,9 @@
-import {MemberNumber, PracticalId, PracticalIdCodec} from './types';
+import {
+  MemberNumber,
+  MemberNumberCodec,
+  PracticalId,
+  PracticalIdCodec,
+} from './types';
 import * as t from 'io-ts';
 import * as tt from 'io-ts-types';
 
@@ -22,15 +27,19 @@ export const practicalScheduled = (
   date,
 });
 
-type MemberSignedUpForPractical = {
-  _type: 'MemberSignedUpForPractical';
-  memberNumber: MemberNumber;
-  practicalId: string;
-};
+export const MemberSignedUpForPracticalCodec = t.type({
+  _type: t.literal('MemberSignedUpForPractical'),
+  memberNumber: MemberNumberCodec,
+  practicalId: PracticalIdCodec,
+});
+
+export type MemberSignedUpForPractical = t.TypeOf<
+  typeof MemberSignedUpForPracticalCodec
+>;
 
 export const memberSignedUpForPractical = (
   memberNumber: MemberNumber,
-  practicalId: string
+  practicalId: PracticalId
 ): MemberSignedUpForPractical => ({
   _type: 'MemberSignedUpForPractical' as const,
   memberNumber,
