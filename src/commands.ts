@@ -1,4 +1,4 @@
-import {MemberNumberCodec} from './types';
+import {MemberNumber, MemberNumberCodec} from './types';
 import * as t from 'io-ts';
 
 const JoinPractical = t.type({
@@ -10,3 +10,12 @@ const JoinPractical = t.type({
 type JoinPractical = t.TypeOf<typeof JoinPractical>;
 
 export type Command = JoinPractical;
+
+export const joinPractical = (
+  memberNumber: MemberNumber,
+  practicalId: string
+): JoinPractical => ({
+  _type: 'JoinPractical' as const,
+  memberNumber,
+  practicalId,
+});

@@ -2,16 +2,13 @@ import {MemberNumber} from './../src/types';
 import {practical} from '../src/practical';
 import {faker} from '@faker-js/faker';
 import {practicalScheduled} from '../src/events';
+import {joinPractical} from '../src/commands';
 
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {
     const practicalId = 'foo';
     const memberNumber = 123;
-    const command = {
-      _type: 'JoinPractical' as const,
-      memberNumber: 123 as MemberNumber,
-      practicalId,
-    };
+    const command = joinPractical(123 as MemberNumber, practicalId);
 
     describe('and the practical is in the future and has slots available', () => {
       const history = [practicalScheduled(practicalId, 2, faker.date.future())];
