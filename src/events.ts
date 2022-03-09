@@ -1,3 +1,5 @@
+import {MemberNumber} from './types';
+
 type PracticalScheduled = {
   _type: 'PracticalScheduled';
   capacity: number;
@@ -18,8 +20,17 @@ export const practicalScheduled = (
 
 type MemberSignedUpForPractical = {
   _type: 'MemberSignedUpForPractical';
-  memberNumber: number;
+  memberNumber: MemberNumber;
   practicalId: string;
 };
+
+export const memberSignedUpForPractical = (
+  memberNumber: MemberNumber,
+  practicalId: string
+): MemberSignedUpForPractical => ({
+  _type: 'MemberSignedUpForPractical' as const,
+  memberNumber,
+  practicalId,
+});
 
 export type Event = PracticalScheduled | MemberSignedUpForPractical;
