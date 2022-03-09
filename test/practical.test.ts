@@ -8,16 +8,16 @@ describe('practical', () => {
   describe('when given a JoinPractical command', () => {
     const practicalId = arbitraryPracticalId();
     const memberNumber = arbitraryMemberNumber();
-    const command = joinPractical(arbitraryMemberNumber(), practicalId);
+    const command = joinPractical(memberNumber, practicalId);
 
     describe('and the practical is in the future and has slots available', () => {
       const history = [practicalScheduled(practicalId, 2, faker.date.future())];
       const result = practical(history)(command);
 
-      it.skip('returns a MemberSignedUpForPractical event', () => {
-        expect(result).toStrictEqual(
-          memberSignedUpForPractical(memberNumber, practicalId)
-        );
+      it('returns a MemberSignedUpForPractical event', () => {
+        expect(result).toStrictEqual([
+          memberSignedUpForPractical(memberNumber, practicalId),
+        ]);
       });
     });
 
