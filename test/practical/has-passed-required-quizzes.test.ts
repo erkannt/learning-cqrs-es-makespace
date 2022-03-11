@@ -11,7 +11,7 @@ describe('has-passed-required-quizzes', () => {
   const memberNumber = arbitraryMemberNumber();
   const command = joinPractical(memberNumber, practicalId);
 
-  describe('when member has passed ALL quizzes required to attend practical', () => {
+  describe('when member has passed all quizzes required to attend practical', () => {
     const QuizIdA = arbitraryQuizId();
     const QuizIdB = arbitraryQuizId();
     const history = [
@@ -31,12 +31,22 @@ describe('has-passed-required-quizzes', () => {
     });
   });
 
-  describe('when member has passed SOME quizzes required to attend practical', () => {
-    it.todo('returns on left');
-  });
+  describe('when member has NOT passed all quizzes required to attend practical', () => {
+    const QuizIdA = arbitraryQuizId();
+    const history = [
+      practicalScheduled(
+        practicalId,
+        [QuizIdA, arbitraryQuizId()],
+        2,
+        faker.date.future()
+      ),
+      quizPassed(QuizIdA, memberNumber),
+    ];
+    const result = hasPassedRequiredQuizzes(history)(command);
 
-  describe('when member has passed NO quizzes required to attend practical', () => {
-    it.todo('returns on left');
+    it('returns on left', () => {
+      expect(E.isLeft(result)).toBe(true);
+    });
   });
 
   describe('when practical requires no quizzes to attend', () => {
