@@ -23,12 +23,16 @@ describe('has-passed-required-quizzes', () => {
 
   describe('when practical requires no quizzes to attend', () => {
     const history = [
-      practicalScheduled(arbitraryPracticalId(), [], 2, faker.date.future()),
+      practicalScheduled(practicalId, [], 2, faker.date.future()),
     ];
     const result = hasPassedRequiredQuizzes(history)(command);
 
-    it.skip('returns on right', () => {
+    it('returns on right', () => {
       expect(E.isRight(result)).toBe(true);
     });
+  });
+
+  describe('when requested practical does not exist', () => {
+    it.todo('returns on left');
   });
 });
