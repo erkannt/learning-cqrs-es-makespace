@@ -7,11 +7,12 @@ import {
   PracticalScheduledCodec,
   MemberSignedUpForPracticalCodec,
   memberSignedUpForPractical,
+  MemberSignedUpForPractical,
 } from '../events';
 
 export type Practical = (
   history: ReadonlyArray<Event>
-) => (command: JoinPractical) => ReadonlyArray<Event>;
+) => (command: JoinPractical) => ReadonlyArray<MemberSignedUpForPractical>;
 
 export const practical: Practical = history => command => {
   const practical = pipe(
