@@ -2,9 +2,10 @@ import * as E from 'fp-ts/Either';
 import {JoinPractical} from '../commands';
 import {Event, PracticalScheduledCodec, QuizPassedCodec} from '../events';
 import * as RA from 'fp-ts/ReadonlyArray';
-import {flow, pipe} from 'fp-ts/lib/function';
-import {MemberNumber} from '../types';
+import {pipe} from 'fp-ts/lib/function';
+import {MemberNumber, PracticalId} from '../types';
 import * as B from 'fp-ts/boolean';
+import {sequenceS} from 'fp-ts/lib/Apply';
 
 const passedQuizzes = (
   history: ReadonlyArray<Event>,
@@ -17,26 +18,33 @@ const passedQuizzes = (
     RA.map(event => event.quizId)
   );
 
+const requiredQuizzes = (
+  history: ReadonlyArray<Event>,
+  practicalId: PracticalId
+) =>
+  pipe(
+    history,
+    RA.filter(PracticalScheduledCodec.is),
+    RA.findFirst(event => event.id === practicalId),
+    E.fromOption(() => 'practical does not exist'),
+    E.map(event => event.requiredQuizzes)
+  );
+
 type HasPassedRequiredQuizzes = (
   history: ReadonlyArray<Event>
 ) => (command: JoinPractical) => E.Either<unknown, unknown>;
 
 export const hasPassedRequiredQuizzes: HasPassedRequiredQuizzes =
-  history => command => {
-    const required = pipe(
-      history,
-      RA.filter(PracticalScheduledCodec.is),
-      RA.findFirst(event => event.id === command.practicalId),
-      E.fromOption(() => 'practical does not exist'),
-      E.map(event => event.requiredQuizzes)
-    );
-
-    const passed = passedQuizzes(history, command.memberNumber);
-
-    return pipe(
-      required,
-      E.chain(
-        flow(
+  history => command =>
+    pipe(
+      {
+        required: requiredQuizzes(history, command.practicalId),
+        passed: E.right(passedQuizzes(history, command.memberNumber)),
+      },
+      sequenceS(E.Apply),
+      E.chain(({required, passed}) =>
+        pipe(
+          required,
           RA.every(req => passed.includes(req)),
           B.match(
             () => E.left('not all required quizzes passed'),
@@ -45,4 +53,3 @@ export const hasPassedRequiredQuizzes: HasPassedRequiredQuizzes =
         )
       )
     );
-  };
