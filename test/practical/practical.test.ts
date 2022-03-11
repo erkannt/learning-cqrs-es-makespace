@@ -11,7 +11,9 @@ describe('practical', () => {
     const command = joinPractical(memberNumber, practicalId);
 
     describe('and the practical is in the future and has slots available', () => {
-      const history = [practicalScheduled(practicalId, 2, faker.date.future())];
+      const history = [
+        practicalScheduled(practicalId, [], 2, faker.date.future()),
+      ];
       const result = practical(history)(command);
 
       it('returns a MemberSignedUpForPractical event', () => {
@@ -22,7 +24,9 @@ describe('practical', () => {
     });
 
     describe('and the practical is in the past', () => {
-      const history = [practicalScheduled(practicalId, 2, faker.date.past())];
+      const history = [
+        practicalScheduled(practicalId, [], 2, faker.date.past()),
+      ];
       const result = practical(history)(command);
 
       it('returns no events', () => {
@@ -32,7 +36,7 @@ describe('practical', () => {
 
     describe('and the practical has no free spaces left', () => {
       const history = [
-        practicalScheduled(practicalId, 2, faker.date.future()),
+        practicalScheduled(practicalId, [], 2, faker.date.future()),
         memberSignedUpForPractical(arbitraryMemberNumber(), practicalId),
         memberSignedUpForPractical(arbitraryMemberNumber(), practicalId),
       ];

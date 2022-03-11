@@ -18,7 +18,7 @@ describe('has-passed-required-quizzes', () => {
     const practicalId = arbitraryPracticalId();
     const command = joinPractical(arbitraryMemberNumber(), practicalId);
     const history = [
-      practicalScheduled(arbitraryPracticalId(), 2, faker.date.future()),
+      practicalScheduled(arbitraryPracticalId(), [], 2, faker.date.future()),
     ];
     const result = hasPassedRequiredQuizzes(history)(command);
 
