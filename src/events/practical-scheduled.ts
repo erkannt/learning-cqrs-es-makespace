@@ -1,9 +1,4 @@
-import {
-  MemberNumber,
-  MemberNumberCodec,
-  PracticalId,
-  PracticalIdCodec,
-} from '../types';
+import {PracticalId, PracticalIdCodec} from '../types';
 import * as t from 'io-ts';
 import * as tt from 'io-ts-types';
 

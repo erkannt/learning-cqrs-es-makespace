@@ -1,4 +1,4 @@
-import {arbitraryMemberNumber, arbitraryPracticalId} from './../src/types';
+import {arbitraryMemberNumber, arbitraryPracticalId} from '../src/types';
 import {practical} from '../src/practical/practical';
 import {faker} from '@faker-js/faker';
 import {joinPractical} from '../src/commands';
