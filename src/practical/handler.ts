@@ -3,10 +3,8 @@ import {JoinPractical} from '../commands';
 import {practical} from './practical';
 import {Event} from '../events';
 import * as E from 'fp-ts/Either';
-
-const hasCompletedOnlineTraining = () => E.right(undefined);
-
-const hasCompletedSafetyQuiz = () => E.right(undefined);
+import {hasCompletedOnlineTraining} from './has-completed-online-training';
+import {hasCompletedSafetyQuiz} from './has-completed-safety-quiz';
 
 export const commandHandler =
   (history: ReadonlyArray<Event>) => (command: JoinPractical) =>
