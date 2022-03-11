@@ -33,6 +33,10 @@ describe('has-passed-required-quizzes', () => {
   });
 
   describe('when requested practical does not exist', () => {
-    it.todo('returns on left');
+    const result = hasPassedRequiredQuizzes([])(command);
+
+    it('returns on left', () => {
+      expect(E.isLeft(result)).toBe(true);
+    });
   });
 });
