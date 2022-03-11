@@ -1,16 +1,34 @@
 import faker from '@faker-js/faker';
 import * as E from 'fp-ts/Either';
 import {joinPractical} from '../../src/commands';
-import {practicalScheduled} from '../../src/events';
+import {practicalScheduled, quizPassed} from '../../src/events';
 import {hasPassedRequiredQuizzes} from '../../src/practical/has-passed-required-quizzes';
 import {arbitraryMemberNumber, arbitraryPracticalId} from '../../src/types';
+import {arbitraryQuizId} from '../../src/types/quiz-id';
 
 describe('has-passed-required-quizzes', () => {
   const practicalId = arbitraryPracticalId();
-  const command = joinPractical(arbitraryMemberNumber(), practicalId);
+  const memberNumber = arbitraryMemberNumber();
+  const command = joinPractical(memberNumber, practicalId);
 
   describe('when member has passed ALL quizzes required to attend practical', () => {
-    it.todo('returns on right');
+    const QuizIdA = arbitraryQuizId();
+    const QuizIdB = arbitraryQuizId();
+    const history = [
+      practicalScheduled(
+        practicalId,
+        [QuizIdA, QuizIdB],
+        2,
+        faker.date.future()
+      ),
+      quizPassed(QuizIdA, memberNumber),
+      quizPassed(QuizIdB, memberNumber),
+    ];
+    const result = hasPassedRequiredQuizzes(history)(command);
+
+    it.skip('returns on right', () => {
+      expect(E.isRight(result)).toBe(true);
+    });
   });
 
   describe('when member has passed SOME quizzes required to attend practical', () => {
