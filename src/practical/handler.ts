@@ -3,15 +3,13 @@ import {JoinPractical} from '../commands';
 import {practical} from './practical';
 import {Event} from '../events';
 import * as E from 'fp-ts/Either';
-import {hasCompletedOnlineTraining} from './has-completed-online-training';
-import {hasCompletedSafetyQuiz} from './has-completed-safety-quiz';
+import {hasPassedRequiredQuizzes} from './has-passed-required-quizzes';
 
 export const commandHandler =
   (history: ReadonlyArray<Event>) => (command: JoinPractical) =>
     pipe(
       command,
       E.right,
-      E.chainFirst(hasCompletedOnlineTraining),
-      E.chainFirst(hasCompletedSafetyQuiz),
+      E.chainFirst(hasPassedRequiredQuizzes(history)),
       E.map(practical(history))
     );
