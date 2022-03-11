@@ -7,4 +7,4 @@ type HasPassedRequiredQuizzes = (
 ) => (command: JoinPractical) => E.Either<unknown, unknown>;
 
 export const hasPassedRequiredQuizzes: HasPassedRequiredQuizzes = () => () =>
-  E.right(undefined);
+  E.left('fail by default');
