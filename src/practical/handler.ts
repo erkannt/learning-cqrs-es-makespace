@@ -1,7 +1,7 @@
 import {pipe} from 'fp-ts/lib/function';
-import {JoinPractical} from './commands';
+import {JoinPractical} from '../commands';
 import {practical} from './practical';
-import {Event} from './events';
+import {Event} from '../events';
 import * as E from 'fp-ts/Either';
 
 const hasCompletedOnlineTraining = () => E.right(undefined);

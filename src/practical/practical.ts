@@ -1,13 +1,13 @@
 import {pipe} from 'fp-ts/lib/function';
-import {JoinPractical} from './commands';
-import {
-  Event,
-  memberSignedUpForPractical,
-  MemberSignedUpForPracticalCodec,
-  PracticalScheduledCodec,
-} from './events';
+import {JoinPractical} from '../commands';
 import * as RA from 'fp-ts/ReadonlyArray';
 import * as O from 'fp-ts/Option';
+import {
+  Event,
+  PracticalScheduledCodec,
+  MemberSignedUpForPracticalCodec,
+  memberSignedUpForPractical,
+} from '../events';
 
 export type Practical = (
   history: ReadonlyArray<Event>

@@ -1,8 +1,8 @@
 import {arbitraryMemberNumber, arbitraryPracticalId} from './../src/types';
-import {practical} from '../src/practical';
+import {practical} from '../src/practical/practical';
 import {faker} from '@faker-js/faker';
-import {memberSignedUpForPractical, practicalScheduled} from '../src/events';
 import {joinPractical} from '../src/commands';
+import {memberSignedUpForPractical, practicalScheduled} from '../src/events';
 
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {
