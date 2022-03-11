@@ -14,7 +14,7 @@ describe('has-passed-required-quizzes', () => {
     it.todo('returns on left');
   });
 
-  describe.skip('when practical requires no quizzes to attend', () => {
+  describe('when practical requires no quizzes to attend', () => {
     const practicalId = arbitraryPracticalId();
     const command = joinPractical(arbitraryMemberNumber(), practicalId);
     const history = [
