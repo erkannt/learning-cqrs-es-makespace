@@ -1,8 +1,21 @@
 import * as E from 'fp-ts/Either';
 import {JoinPractical} from '../commands';
-import {Event, PracticalScheduledCodec} from '../events';
+import {Event, PracticalScheduledCodec, QuizPassedCodec} from '../events';
 import * as RA from 'fp-ts/ReadonlyArray';
-import {pipe} from 'fp-ts/lib/function';
+import {flow, pipe} from 'fp-ts/lib/function';
+import {MemberNumber} from '../types';
+import * as B from 'fp-ts/boolean';
+
+const passedQuizzes = (
+  history: ReadonlyArray<Event>,
+  memberNumber: MemberNumber
+) =>
+  pipe(
+    history,
+    RA.filter(QuizPassedCodec.is),
+    RA.filter(event => event.memberNumber === memberNumber),
+    RA.map(event => event.quizId)
+  );
 
 type HasPassedRequiredQuizzes = (
   history: ReadonlyArray<Event>
@@ -10,16 +23,25 @@ type HasPassedRequiredQuizzes = (
 
 export const hasPassedRequiredQuizzes: HasPassedRequiredQuizzes =
   history => command => {
-    return pipe(
+    const required = pipe(
       history,
       RA.filter(PracticalScheduledCodec.is),
       RA.findFirst(event => event.id === command.practicalId),
       E.fromOption(() => 'practical does not exist'),
-      E.map(event => event.requiredQuizzes),
+      E.map(event => event.requiredQuizzes)
+    );
+
+    const passed = passedQuizzes(history, command.memberNumber);
+
+    return pipe(
+      required,
       E.chain(
-        RA.match(
-          () => E.right('no quizzes required'),
-          () => E.left('fail by default')
+        flow(
+          RA.every(req => passed.includes(req)),
+          B.match(
+            () => E.left('not all required quizzes passed'),
+            () => E.right('all required quizzes passed')
+          )
         )
       )
     );

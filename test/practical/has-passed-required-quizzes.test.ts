@@ -26,7 +26,7 @@ describe('has-passed-required-quizzes', () => {
     ];
     const result = hasPassedRequiredQuizzes(history)(command);
 
-    it.skip('returns on right', () => {
+    it('returns on right', () => {
       expect(E.isRight(result)).toBe(true);
     });
   });
