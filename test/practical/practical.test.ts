@@ -60,13 +60,13 @@ describe('practical', () => {
   });
 
   describe('when given a SchedulePractical command', () => {
-    const spaces = faker.datatype.number({min: 1, max: 10});
+    const capacity = faker.datatype.number({min: 1, max: 10});
     const requiredQuizzes = [arbitraryQuizId()];
 
     describe('and the date is in the future', () => {
       const command = schedulePractical(
         requiredQuizzes,
-        spaces,
+        capacity,
         faker.date.future()
       );
       const result = practical([])(command);
@@ -75,7 +75,7 @@ describe('practical', () => {
         expect(result).toStrictEqual(
           expect.objectContaining({
             requiredQuizzes: command.requiredQuizzes,
-            capacity: command.spaces,
+            capacity: command.capacity,
             date: command.date,
           })
         );
@@ -85,7 +85,7 @@ describe('practical', () => {
     describe('and the date is in the past', () => {
       const command = schedulePractical(
         requiredQuizzes,
-        spaces,
+        capacity,
         faker.date.past()
       );
       const result = practical([])(command);
