@@ -7,6 +7,7 @@ import {
   MemberSignedUpForPracticalCodec,
   memberSignedUpForPractical,
   MemberSignedUpForPractical,
+  PracticalScheduled,
 } from '../events';
 import {JoinPractical} from './join-practical';
 import {SchedulePractical} from './schedule-practical';
@@ -22,27 +23,30 @@ export const practical: Practical = history => command => {
     case 'SchedulePractical':
       return [];
     case 'JoinPractical': {
-      const practical = pipe(
+      const getPractical = pipe(
         history,
         RA.filter(PracticalScheduledCodec.is),
         RA.findFirst(event => event.id === command.practicalId)
       );
 
-      const attendingMembers = pipe(
+      const getAttendingCount = pipe(
         history,
         RA.filter(MemberSignedUpForPracticalCodec.is),
         RA.filter(event => event.practicalId === command.practicalId),
-        RA.map(event => event.memberNumber)
+        RA.map(event => event.memberNumber),
+        RA.size
       );
 
+      const practicalHasFreeSpacesLeft =
+        (attendingCount: number) => (event: PracticalScheduled) =>
+          event.capacity > attendingCount;
+
       return pipe(
-        practical,
+        getPractical,
+        O.filter(practicalHasFreeSpacesLeft(getAttendingCount)),
         O.match(
           () => [],
-          ({capacity, date}) => {
-            if (capacity <= attendingMembers.length) {
-              return [];
-            }
+          ({date}) => {
             if (new Date() > date) {
               return [];
             }
