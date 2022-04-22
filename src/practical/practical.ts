@@ -8,13 +8,16 @@ import {
   memberSignedUpForPractical,
   MemberSignedUpForPractical,
   PracticalScheduled,
+  practicalScheduled,
 } from '../events';
 import {JoinPractical} from './join-practical';
 import {SchedulePractical} from './schedule-practical';
-import {MemberNumber, PracticalId} from '../types';
+import {arbitraryPracticalId, MemberNumber, PracticalId} from '../types';
 import {QuizId} from '../types/quiz-id';
 
 type PracticalCommand = SchedulePractical | JoinPractical;
+
+type PracticalEvent = PracticalScheduled | MemberSignedUpForPractical;
 
 type PracticalState = {
   id: PracticalId;
@@ -45,12 +48,24 @@ const constructStateOfPractical =
 
 export type Practical = (
   history: ReadonlyArray<Event>
-) => (command: PracticalCommand) => ReadonlyArray<MemberSignedUpForPractical>;
+) => (command: PracticalCommand) => ReadonlyArray<PracticalEvent>;
 
 export const practical: Practical = history => command => {
   switch (command._type) {
-    case 'SchedulePractical':
-      return [];
+    case 'SchedulePractical': {
+      const inTheFuture = (date: Date) => new Date() < date;
+
+      return inTheFuture(command.date)
+        ? [
+            practicalScheduled(
+              arbitraryPracticalId(),
+              command.requiredQuizzes,
+              command.capacity,
+              command.date
+            ),
+          ]
+        : [];
+    }
 
     case 'JoinPractical': {
       const practicalHasFreeSpacesLeft = (practicalState: PracticalState) =>

@@ -71,14 +71,14 @@ describe('practical', () => {
       );
       const result = practical([])(command);
 
-      it.skip('returns a PracticalScheduled event', () => {
-        expect(result).toStrictEqual(
+      it('returns a PracticalScheduled event', () => {
+        expect(result).toStrictEqual([
           expect.objectContaining({
             requiredQuizzes: command.requiredQuizzes,
             capacity: command.capacity,
             date: command.date,
-          })
-        );
+          }),
+        ]);
       });
     });
 
