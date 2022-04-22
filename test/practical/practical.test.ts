@@ -1,8 +1,9 @@
 import {arbitraryMemberNumber, arbitraryPracticalId} from '../../src/types';
 import {practical} from '../../src/practical/practical';
 import {faker} from '@faker-js/faker';
-import {joinPractical} from '../../src/commands';
+import {joinPractical, schedulePractical} from '../../src/commands';
 import {memberSignedUpForPractical, practicalScheduled} from '../../src/events';
+import {arbitraryQuizId} from '../../src/types/quiz-id';
 
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {
@@ -63,7 +64,18 @@ describe('practical', () => {
     });
 
     describe('and the date is in the past', () => {
-      it.todo('returns no events');
+      const requiredQuizzes = [arbitraryQuizId()];
+      const spaces = faker.datatype.number({min: 1, max: 10});
+      const command = schedulePractical(
+        requiredQuizzes,
+        spaces,
+        faker.date.past()
+      );
+      const result = practical([])(command);
+
+      it('returns no events', () => {
+        expect(result).toStrictEqual([]);
+      });
     });
   });
 });
