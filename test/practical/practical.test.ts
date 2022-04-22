@@ -56,4 +56,14 @@ describe('practical', () => {
       });
     });
   });
+
+  describe('when given a SchedulePractical command', () => {
+    describe('and the date is in the future', () => {
+      it.todo('returns a PracticalScheduled event');
+    });
+
+    describe('and the date is in the past', () => {
+      it.todo('returns no events');
+    });
+  });
 });
