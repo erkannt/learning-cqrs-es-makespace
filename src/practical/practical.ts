@@ -1,5 +1,4 @@
 import {pipe} from 'fp-ts/lib/function';
-import {Command} from './commands';
 import * as RA from 'fp-ts/ReadonlyArray';
 import * as O from 'fp-ts/Option';
 import {
@@ -9,10 +8,14 @@ import {
   memberSignedUpForPractical,
   MemberSignedUpForPractical,
 } from '../events';
+import {JoinPractical} from './join-practical';
+import {SchedulePractical} from './schedule-practical';
+
+type PracticalCommand = SchedulePractical | JoinPractical;
 
 export type Practical = (
   history: ReadonlyArray<Event>
-) => (command: Command) => ReadonlyArray<MemberSignedUpForPractical>;
+) => (command: PracticalCommand) => ReadonlyArray<MemberSignedUpForPractical>;
 
 export const practical: Practical = history => command => {
   if (command._type !== 'JoinPractical') {

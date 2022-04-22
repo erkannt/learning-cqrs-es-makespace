@@ -1,9 +1,10 @@
 import {arbitraryMemberNumber, arbitraryPracticalId} from '../../src/types';
 import {practical} from '../../src/practical/practical';
 import {faker} from '@faker-js/faker';
-import {joinPractical, schedulePractical} from '../../src/practical/commands';
+import {joinPractical} from '../../src/practical/join-practical';
 import {memberSignedUpForPractical, practicalScheduled} from '../../src/events';
 import {arbitraryQuizId} from '../../src/types/quiz-id';
+import {schedulePractical} from '../../src/practical/schedule-practical';
 
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {

@@ -1,5 +1,5 @@
 import {pipe} from 'fp-ts/lib/function';
-import {JoinPractical} from './commands';
+import {JoinPractical} from './join-practical';
 import {practical} from './practical';
 import {Event} from '../events';
 import * as E from 'fp-ts/Either';
