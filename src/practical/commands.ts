@@ -3,9 +3,9 @@ import {
   MemberNumberCodec,
   PracticalId,
   PracticalIdCodec,
-} from './types';
+} from '../types';
 import * as t from 'io-ts';
-import {QuizId, QuizIdCodec} from './types/quiz-id';
+import {QuizId, QuizIdCodec} from '../types/quiz-id';
 import * as tt from 'io-ts-types';
 
 const JoinPractical = t.type({

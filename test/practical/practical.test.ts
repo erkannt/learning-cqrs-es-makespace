@@ -1,7 +1,7 @@
 import {arbitraryMemberNumber, arbitraryPracticalId} from '../../src/types';
 import {practical} from '../../src/practical/practical';
 import {faker} from '@faker-js/faker';
-import {joinPractical, schedulePractical} from '../../src/commands';
+import {joinPractical, schedulePractical} from '../../src/practical/commands';
 import {memberSignedUpForPractical, practicalScheduled} from '../../src/events';
 import {arbitraryQuizId} from '../../src/types/quiz-id';
 

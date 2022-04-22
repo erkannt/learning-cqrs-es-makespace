@@ -1,6 +1,6 @@
 import faker from '@faker-js/faker';
 import * as E from 'fp-ts/Either';
-import {joinPractical} from '../../src/commands';
+import {joinPractical} from '../../src/practical/commands';
 import {practicalScheduled, quizPassed} from '../../src/events';
 import {hasPassedRequiredQuizzes} from '../../src/practical/has-passed-required-quizzes';
 import {arbitraryMemberNumber, arbitraryPracticalId} from '../../src/types';

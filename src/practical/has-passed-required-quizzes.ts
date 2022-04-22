@@ -1,5 +1,5 @@
 import * as E from 'fp-ts/Either';
-import {JoinPractical} from '../commands';
+import {JoinPractical} from './commands';
 import {Event, PracticalScheduledCodec, QuizPassedCodec} from '../events';
 import * as RA from 'fp-ts/ReadonlyArray';
 import {pipe} from 'fp-ts/lib/function';
