@@ -12,17 +12,17 @@ describe('has-passed-required-quizzes', () => {
   const command = joinPractical(memberNumber, practicalId);
 
   describe('when member has passed all quizzes required to attend practical', () => {
-    const QuizIdA = arbitraryQuizId();
-    const QuizIdB = arbitraryQuizId();
+    const quizIdA = arbitraryQuizId();
+    const quizIdB = arbitraryQuizId();
     const history = [
       practicalScheduled(
         practicalId,
-        [QuizIdA, QuizIdB],
+        [quizIdA, quizIdB],
         2,
         faker.date.future()
       ),
-      quizPassed(QuizIdA, memberNumber),
-      quizPassed(QuizIdB, memberNumber),
+      quizPassed(quizIdA, memberNumber),
+      quizPassed(quizIdB, memberNumber),
     ];
     const result = hasPassedRequiredQuizzes(history)(command);
 
@@ -32,15 +32,15 @@ describe('has-passed-required-quizzes', () => {
   });
 
   describe('when member has NOT passed all quizzes required to attend practical', () => {
-    const QuizIdA = arbitraryQuizId();
+    const quizIdA = arbitraryQuizId();
     const history = [
       practicalScheduled(
         practicalId,
-        [QuizIdA, arbitraryQuizId()],
+        [quizIdA, arbitraryQuizId()],
         2,
         faker.date.future()
       ),
-      quizPassed(QuizIdA, memberNumber),
+      quizPassed(quizIdA, memberNumber),
     ];
     const result = hasPassedRequiredQuizzes(history)(command);
 
