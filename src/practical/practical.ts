@@ -41,15 +41,16 @@ export const practical: Practical = history => command => {
         (attendingCount: number) => (event: PracticalScheduled) =>
           event.capacity > attendingCount;
 
+      const practicalIsInTheFuture = (event: PracticalScheduled) =>
+        new Date() < event.date;
+
       return pipe(
         getPractical,
         O.filter(practicalHasFreeSpacesLeft(getAttendingCount)),
+        O.filter(practicalIsInTheFuture),
         O.match(
           () => [],
-          ({date}) => {
-            if (new Date() > date) {
-              return [];
-            }
+          () => {
             return [
               memberSignedUpForPractical(
                 command.memberNumber,
