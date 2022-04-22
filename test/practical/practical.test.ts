@@ -60,13 +60,29 @@ describe('practical', () => {
   });
 
   describe('when given a SchedulePractical command', () => {
+    const spaces = faker.datatype.number({min: 1, max: 10});
+    const requiredQuizzes = [arbitraryQuizId()];
+
     describe('and the date is in the future', () => {
-      it.todo('returns a PracticalScheduled event');
+      const command = schedulePractical(
+        requiredQuizzes,
+        spaces,
+        faker.date.future()
+      );
+      const result = practical([])(command);
+
+      it.skip('returns a PracticalScheduled event', () => {
+        expect(result).toStrictEqual(
+          expect.objectContaining({
+            requiredQuizzes: command.requiredQuizzes,
+            capacity: command.spaces,
+            date: command.date,
+          })
+        );
+      });
     });
 
     describe('and the date is in the past', () => {
-      const requiredQuizzes = [arbitraryQuizId()];
-      const spaces = faker.datatype.number({min: 1, max: 10});
       const command = schedulePractical(
         requiredQuizzes,
         spaces,
