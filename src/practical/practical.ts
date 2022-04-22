@@ -18,38 +18,43 @@ export type Practical = (
 ) => (command: PracticalCommand) => ReadonlyArray<MemberSignedUpForPractical>;
 
 export const practical: Practical = history => command => {
-  if (command._type !== 'JoinPractical') {
-    return [];
+  switch (command._type) {
+    case 'SchedulePractical':
+      return [];
+    case 'JoinPractical': {
+      const practical = pipe(
+        history,
+        RA.filter(PracticalScheduledCodec.is),
+        RA.findFirst(event => event.id === command.practicalId)
+      );
+
+      const attendingMembers = pipe(
+        history,
+        RA.filter(MemberSignedUpForPracticalCodec.is),
+        RA.filter(event => event.practicalId === command.practicalId),
+        RA.map(event => event.memberNumber)
+      );
+
+      return pipe(
+        practical,
+        O.match(
+          () => [],
+          ({capacity, date}) => {
+            if (capacity <= attendingMembers.length) {
+              return [];
+            }
+            if (new Date() > date) {
+              return [];
+            }
+            return [
+              memberSignedUpForPractical(
+                command.memberNumber,
+                command.practicalId
+              ),
+            ];
+          }
+        )
+      );
+    }
   }
-
-  const practical = pipe(
-    history,
-    RA.filter(PracticalScheduledCodec.is),
-    RA.findFirst(event => event.id === command.practicalId)
-  );
-
-  const attendingMembers = pipe(
-    history,
-    RA.filter(MemberSignedUpForPracticalCodec.is),
-    RA.filter(event => event.practicalId === command.practicalId),
-    RA.map(event => event.memberNumber)
-  );
-
-  return pipe(
-    practical,
-    O.match(
-      () => [],
-      ({capacity, date}) => {
-        if (capacity <= attendingMembers.length) {
-          return [];
-        }
-        if (new Date() > date) {
-          return [];
-        }
-        return [
-          memberSignedUpForPractical(command.memberNumber, command.practicalId),
-        ];
-      }
-    )
-  );
 };
