@@ -1,8 +1,9 @@
-import {PracticalId, PracticalIdCodec} from '../types';
+import {arbitraryPracticalId, PracticalId, PracticalIdCodec} from '../types';
 import * as t from 'io-ts';
 import * as tt from 'io-ts-types';
-import {QuizId, QuizIdCodec} from '../types/quiz-id';
-import {Duration, DurationCodec} from '../types/duration';
+import {arbitraryQuizId, QuizId, QuizIdCodec} from '../types/quiz-id';
+import {arbitraryDuration, Duration, DurationCodec} from '../types/duration';
+import faker from '@faker-js/faker';
 
 export const PracticalScheduledCodec = t.type({
   _type: t.literal('PracticalScheduled'),
@@ -32,3 +33,13 @@ export const practicalScheduled = (
   date,
   duration,
 });
+
+export const arbitraryPracticalScheduled = () =>
+  practicalScheduled(
+    arbitraryPracticalId(),
+    faker.lorem.words(),
+    Array.from(Array(faker.datatype.number(5)).map(() => arbitraryQuizId())),
+    faker.datatype.number({min: 2, max: 10}),
+    faker.date.future(),
+    arbitraryDuration()
+  );
