@@ -7,6 +7,7 @@ import {Duration, DurationCodec} from '../types/duration';
 export const PracticalScheduledCodec = t.type({
   _type: t.literal('PracticalScheduled'),
   id: PracticalIdCodec,
+  title: t.string,
   requiredQuizzes: t.readonlyArray(QuizIdCodec),
   capacity: t.number,
   date: tt.DateFromISOString,
@@ -17,6 +18,7 @@ export type PracticalScheduled = t.TypeOf<typeof PracticalScheduledCodec>;
 
 export const practicalScheduled = (
   practicalId: PracticalId,
+  title: string,
   requiredQuizzes: ReadonlyArray<QuizId>,
   capacity: number,
   date: Date,
@@ -24,6 +26,7 @@ export const practicalScheduled = (
 ): PracticalScheduled => ({
   _type: 'PracticalScheduled' as const,
   id: practicalId,
+  title,
   requiredQuizzes,
   capacity,
   date,

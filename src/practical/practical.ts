@@ -32,6 +32,7 @@ export const practical: Practical = history => command => {
         ? [
             practicalScheduled(
               arbitraryPracticalId(),
+              command.title,
               command.requiredQuizzes,
               command.capacity,
               command.date,

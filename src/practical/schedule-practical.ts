@@ -6,6 +6,7 @@ import {Duration, DurationCodec} from '../types/duration';
 const SchedulePractical = t.type({
   _type: t.literal('SchedulePractical'),
   requiredQuizzes: t.readonlyArray(QuizIdCodec),
+  title: t.string,
   capacity: t.number,
   date: tt.date,
   duration: DurationCodec,
@@ -14,12 +15,14 @@ const SchedulePractical = t.type({
 export type SchedulePractical = t.TypeOf<typeof SchedulePractical>;
 
 export const schedulePractical = (
+  title: string,
   requiredQuizzes: ReadonlyArray<QuizId>,
   capacity: number,
   date: Date,
   duration: Duration
 ): SchedulePractical => ({
   _type: 'SchedulePractical' as const,
+  title,
   requiredQuizzes,
   capacity,
   date,

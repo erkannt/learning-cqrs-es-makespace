@@ -17,6 +17,7 @@ describe('practical', () => {
       const history = [
         practicalScheduled(
           practicalId,
+          faker.lorem.words(),
           [],
           2,
           faker.date.future(),
@@ -36,6 +37,7 @@ describe('practical', () => {
       const history = [
         practicalScheduled(
           practicalId,
+          faker.lorem.words(),
           [],
           2,
           faker.date.past(),
@@ -53,6 +55,7 @@ describe('practical', () => {
       const history = [
         practicalScheduled(
           practicalId,
+          faker.lorem.words(),
           [],
           2,
           faker.date.future(),
@@ -84,6 +87,7 @@ describe('practical', () => {
 
     describe('and the date is in the future', () => {
       const command = schedulePractical(
+        faker.lorem.words(),
         requiredQuizzes,
         capacity,
         faker.date.future(),
@@ -104,6 +108,7 @@ describe('practical', () => {
 
     describe('and the date is in the past', () => {
       const command = schedulePractical(
+        faker.lorem.words(),
         requiredQuizzes,
         capacity,
         faker.date.past(),

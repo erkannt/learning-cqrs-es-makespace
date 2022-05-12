@@ -18,6 +18,7 @@ describe('has-passed-required-quizzes', () => {
     const history = [
       practicalScheduled(
         practicalId,
+        faker.lorem.words(),
         [quizIdA, quizIdB],
         2,
         faker.date.future(),
@@ -38,6 +39,7 @@ describe('has-passed-required-quizzes', () => {
     const history = [
       practicalScheduled(
         practicalId,
+        faker.lorem.words(),
         [quizIdA, arbitraryQuizId()],
         2,
         faker.date.future(),
@@ -56,6 +58,7 @@ describe('has-passed-required-quizzes', () => {
     const history = [
       practicalScheduled(
         practicalId,
+        faker.lorem.words(),
         [],
         2,
         faker.date.future(),
