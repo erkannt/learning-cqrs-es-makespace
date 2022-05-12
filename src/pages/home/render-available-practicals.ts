@@ -1,7 +1,7 @@
 import {pipe} from 'fp-ts/lib/function';
 import * as RA from 'fp-ts/ReadonlyArray';
-import {Duration} from 'tinyduration';
 import {renderDatetime, renderDuration} from '../../shared-renderers';
+import {Duration} from '../../types/duration';
 
 type PracticalViewModel = {
   title: string;

@@ -5,6 +5,7 @@ import {joinPractical} from '../../src/practical/join-practical';
 import {memberSignedUpForPractical, practicalScheduled} from '../../src/events';
 import {arbitraryQuizId} from '../../src/types/quiz-id';
 import {schedulePractical} from '../../src/practical/schedule-practical';
+import {arbitraryDuration} from '../../src/types/duration';
 
 describe('practical', () => {
   describe('when given a JoinPractical command', () => {
@@ -14,7 +15,13 @@ describe('practical', () => {
 
     describe('and the practical is in the future and has slots available', () => {
       const history = [
-        practicalScheduled(practicalId, [], 2, faker.date.future()),
+        practicalScheduled(
+          practicalId,
+          [],
+          2,
+          faker.date.future(),
+          arbitraryDuration()
+        ),
       ];
       const result = practical(history)(command);
 
@@ -27,7 +34,13 @@ describe('practical', () => {
 
     describe('and the practical is in the past', () => {
       const history = [
-        practicalScheduled(practicalId, [], 2, faker.date.past()),
+        practicalScheduled(
+          practicalId,
+          [],
+          2,
+          faker.date.past(),
+          arbitraryDuration()
+        ),
       ];
       const result = practical(history)(command);
 
@@ -38,7 +51,13 @@ describe('practical', () => {
 
     describe('and the practical has no free spaces left', () => {
       const history = [
-        practicalScheduled(practicalId, [], 2, faker.date.future()),
+        practicalScheduled(
+          practicalId,
+          [],
+          2,
+          faker.date.future(),
+          arbitraryDuration()
+        ),
         memberSignedUpForPractical(arbitraryMemberNumber(), practicalId),
         memberSignedUpForPractical(arbitraryMemberNumber(), practicalId),
       ];
@@ -67,7 +86,8 @@ describe('practical', () => {
       const command = schedulePractical(
         requiredQuizzes,
         capacity,
-        faker.date.future()
+        faker.date.future(),
+        arbitraryDuration()
       );
       const result = practical([])(command);
 
@@ -86,7 +106,8 @@ describe('practical', () => {
       const command = schedulePractical(
         requiredQuizzes,
         capacity,
-        faker.date.past()
+        faker.date.past(),
+        arbitraryDuration()
       );
       const result = practical([])(command);
 

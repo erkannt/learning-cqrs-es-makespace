@@ -34,7 +34,8 @@ export const practical: Practical = history => command => {
               arbitraryPracticalId(),
               command.requiredQuizzes,
               command.capacity,
-              command.date
+              command.date,
+              command.duration
             ),
           ]
         : [];

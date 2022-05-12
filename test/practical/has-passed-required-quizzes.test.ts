@@ -5,6 +5,7 @@ import {practicalScheduled, quizPassed} from '../../src/events';
 import {hasPassedRequiredQuizzes} from '../../src/practical/has-passed-required-quizzes';
 import {arbitraryMemberNumber, arbitraryPracticalId} from '../../src/types';
 import {arbitraryQuizId} from '../../src/types/quiz-id';
+import {arbitraryDuration} from '../../src/types/duration';
 
 describe('has-passed-required-quizzes', () => {
   const practicalId = arbitraryPracticalId();
@@ -19,7 +20,8 @@ describe('has-passed-required-quizzes', () => {
         practicalId,
         [quizIdA, quizIdB],
         2,
-        faker.date.future()
+        faker.date.future(),
+        arbitraryDuration()
       ),
       quizPassed(quizIdA, memberNumber),
       quizPassed(quizIdB, memberNumber),
@@ -38,7 +40,8 @@ describe('has-passed-required-quizzes', () => {
         practicalId,
         [quizIdA, arbitraryQuizId()],
         2,
-        faker.date.future()
+        faker.date.future(),
+        arbitraryDuration()
       ),
       quizPassed(quizIdA, memberNumber),
     ];
@@ -51,7 +54,13 @@ describe('has-passed-required-quizzes', () => {
 
   describe('when practical requires no quizzes to attend', () => {
     const history = [
-      practicalScheduled(practicalId, [], 2, faker.date.future()),
+      practicalScheduled(
+        practicalId,
+        [],
+        2,
+        faker.date.future(),
+        arbitraryDuration()
+      ),
     ];
     const result = hasPassedRequiredQuizzes(history)(command);
 
