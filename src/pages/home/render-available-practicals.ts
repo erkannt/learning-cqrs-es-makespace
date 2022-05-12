@@ -8,7 +8,6 @@ type PracticalViewModel = {
   freeSlots: number;
   date: Date;
   duration: Duration;
-  trainerName: string;
 };
 
 export const renderAvailablePracticals = (
@@ -22,7 +21,6 @@ export const renderAvailablePracticals = (
 				<p>Free slots: ${practical.freeSlots}</p>
 				<p>When: ${renderDatetime(practical.date)}</p>
 				<p>Duration: ${renderDuration(practical.duration)}</p>
-				<p>Trainer: ${practical.trainerName}</p>
 			`
     ),
     RA.map(content => `<li>${content}</li>`),
