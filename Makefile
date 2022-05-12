@@ -1,4 +1,4 @@
-.phony: dev test
+.PHONY: dev test
 
 node_modules: package.json package-lock.json
 	npm install
