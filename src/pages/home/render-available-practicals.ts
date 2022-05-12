@@ -1,9 +1,7 @@
 import {pipe} from 'fp-ts/lib/function';
 import * as RA from 'fp-ts/ReadonlyArray';
 import {Duration} from 'tinyduration';
-
-const renderDuration = (duration: Duration) =>
-  `${duration.hours ?? '00'}:${duration.minutes ?? '00'}`;
+import {renderDatetime, renderDuration} from '../../shared-renderers';
 
 type PracticalViewModel = {
   title: string;
@@ -22,12 +20,8 @@ export const renderAvailablePracticals = (
       practical => `
 				<h3>${practical.title}</h3>
 				<p>Free slots: ${practical.freeSlots}</p>
-				<p>When: <time datetime="${
-          practical.date.toISOString
-        }"> ${practical.date.toLocaleString()} </time></p>
-				<p>Duration: <time datetime="${practical.duration}">${renderDuration(
-        practical.duration
-      )}</time></p>
+				<p>When: ${renderDatetime(practical.date)}</p>
+				<p>Duration: ${renderDuration(practical.duration)}</p>
 				<p>Trainer: ${practical.trainerName}</p>
 			`
     ),
