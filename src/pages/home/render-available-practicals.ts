@@ -18,7 +18,9 @@ export const renderAvailablePracticals = (
       practical => `
 				<h3>${practical.title}</h3>
 				<p>Free slots: ${practical.freeSlots}</p>
-				<p>When: <time datetime="${practical.date.toISOString}">2011-11-18 14:54</time></p>
+				<p>When: <time datetime="${
+          practical.date.toISOString
+        }"> ${practical.date.toLocaleString()} </time></p>
 				<p>Duration: <time datetime="${practical.duration}">2h</time></p>
 				<p>Trainer: ${practical.trainerName}</p>
 			`
