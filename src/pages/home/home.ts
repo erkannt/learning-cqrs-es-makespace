@@ -8,7 +8,7 @@ export const home = pipe(
       title: 'Bandsaw',
       freeSlots: 3,
       date: new Date('2011-11-18T14:54'),
-      duration: 'P2H30M',
+      duration: {hours: 2, minutes: 30},
       trainerName: 'Alice Jones',
     },
   ],
