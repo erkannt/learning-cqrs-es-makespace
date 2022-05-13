@@ -1,11 +1,8 @@
-import {pipe} from 'fp-ts/lib/function';
-import {
-  arbitraryPracticalScheduled,
-  PracticalScheduled,
-} from '../../events/practical-scheduled';
-import {renderAvailablePracticals} from './render-available-practicals';
-import {renderPage} from './render-page';
-import * as RA from 'fp-ts/ReadonlyArray';
+import * as RA from 'fp-ts/ReadonlyArray'
+import { pipe } from 'fp-ts/lib/function'
+import { PracticalScheduled, arbitraryPracticalScheduled } from '../../events/practical-scheduled'
+import { renderAvailablePracticals } from './render-available-practicals'
+import { renderPage } from './render-page'
 
 const availablePracticals = (events: ReadonlyArray<PracticalScheduled>) =>
   pipe(
@@ -15,16 +12,12 @@ const availablePracticals = (events: ReadonlyArray<PracticalScheduled>) =>
       freeSlots: event.capacity,
       date: event.date,
       duration: event.duration,
-    }))
-  );
+    })),
+  )
 
 export const home = pipe(
-  [
-    arbitraryPracticalScheduled(),
-    arbitraryPracticalScheduled(),
-    arbitraryPracticalScheduled(),
-  ],
+  [arbitraryPracticalScheduled(), arbitraryPracticalScheduled(), arbitraryPracticalScheduled()],
   availablePracticals,
   renderAvailablePracticals,
-  renderPage
-);
+  renderPage,
+)
