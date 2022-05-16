@@ -1,7 +1,7 @@
-import * as t from 'io-ts'
-import * as tt from 'io-ts-types'
-import { Duration, DurationCodec } from '../types/duration'
-import { QuizId, QuizIdCodec } from '../types/quiz-id'
+import * as t from 'io-ts';
+import * as tt from 'io-ts-types';
+import { Duration, DurationCodec } from '../types/duration';
+import { QuizId, QuizIdCodec } from '../types/quiz-id';
 
 const SchedulePractical = t.type({
   _type: t.literal('SchedulePractical'),
@@ -10,9 +10,9 @@ const SchedulePractical = t.type({
   capacity: t.number,
   date: tt.date,
   duration: DurationCodec,
-})
+});
 
-export type SchedulePractical = t.TypeOf<typeof SchedulePractical>
+export type SchedulePractical = t.TypeOf<typeof SchedulePractical>;
 
 export const schedulePractical = (
   title: string,
@@ -27,4 +27,4 @@ export const schedulePractical = (
   capacity,
   date,
   duration,
-})
+});

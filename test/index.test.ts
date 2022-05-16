@@ -1,7 +1,7 @@
 describe('index', () => {
   it('always passes', () => {
-    const foo = true
+    const foo = true;
 
-    expect(foo).toBe(true)
-  })
-})
+    expect(foo).toBe(true);
+  });
+});

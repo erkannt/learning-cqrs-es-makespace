@@ -5,4 +5,4 @@ export const renderPage = (availabePracticals: string) => `
 	${availabePracticals}
 
 	<a href="schedule-practical">Schedule a new practical</a>
-`
+`;
