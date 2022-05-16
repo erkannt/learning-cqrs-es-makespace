@@ -1,6 +1,6 @@
 import * as RA from 'fp-ts/ReadonlyArray'
 import { pipe } from 'fp-ts/lib/function'
-import { PracticalScheduled, arbitraryPracticalScheduled } from '../../events/practical-scheduled'
+import { PracticalScheduled } from '../../events/practical-scheduled'
 import { renderAvailablePracticals } from './render-available-practicals'
 import { renderPage } from './render-page'
 
@@ -15,9 +15,8 @@ const availablePracticals = (events: ReadonlyArray<PracticalScheduled>) =>
     })),
   )
 
-export const home = pipe(
-  [arbitraryPracticalScheduled(), arbitraryPracticalScheduled(), arbitraryPracticalScheduled()],
-  availablePracticals,
-  renderAvailablePracticals,
-  renderPage,
-)
+type Ports = {
+  getHistory: ReadonlyArray<PracticalScheduled>
+}
+
+export const home = (ports: Ports) => pipe(ports.getHistory, availablePracticals, renderAvailablePracticals, renderPage)
