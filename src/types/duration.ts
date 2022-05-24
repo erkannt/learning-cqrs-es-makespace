@@ -7,7 +7,7 @@ type HoursBrand = {
 
 const HoursCodec = t.brand(
   t.Int,
-  (input): input is t.Branded<t.Int, HoursBrand> => input > 0,
+  (input): input is t.Branded<t.Int, HoursBrand> => input >= 0,
   'Hours',
 );
 
@@ -19,7 +19,7 @@ type MinutesBrand = {
 
 const MinutesCodec = t.brand(
   t.Int,
-  (input): input is t.Branded<t.Int, MinutesBrand> => input > 0,
+  (input): input is t.Branded<t.Int, MinutesBrand> => input >= 0,
   'Minutes',
 );
 
