@@ -3,7 +3,7 @@
 // express 5 changes this but is still in beta and types
 // have not been updated yet
 import express, { Application, Request, Response } from 'express';
-import * as T from 'fp-ts/Task';
+import * as TE from 'fp-ts/TaskEither';
 import path from 'path';
 import { arbitraryPracticalScheduled } from './events/practical-scheduled';
 import { home } from './pages/home';
@@ -13,7 +13,7 @@ const app: Application = express();
 const port = 8080;
 
 const adapters = {
-  getHistory: T.of([
+  getHistory: TE.right([
     arbitraryPracticalScheduled(),
     arbitraryPracticalScheduled(),
     arbitraryPracticalScheduled(),
