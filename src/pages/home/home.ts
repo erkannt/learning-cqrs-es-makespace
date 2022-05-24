@@ -1,7 +1,11 @@
 import * as RA from 'fp-ts/ReadonlyArray';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/lib/function';
-import { PracticalScheduled } from '../../events/practical-scheduled';
+import {
+  Event,
+  PracticalScheduled,
+  PracticalScheduledCodec,
+} from '../../events';
 import { renderAvailablePracticals } from './render-available-practicals';
 import { renderPage } from './render-page';
 
@@ -17,12 +21,13 @@ const availablePracticals = (events: ReadonlyArray<PracticalScheduled>) =>
   );
 
 type Ports = {
-  getHistory: TE.TaskEither<unknown, ReadonlyArray<PracticalScheduled>>;
+  getHistory: TE.TaskEither<unknown, ReadonlyArray<Event>>;
 };
 
 export const home = (ports: Ports) =>
   pipe(
     ports.getHistory,
+    TE.map(RA.filter(PracticalScheduledCodec.is)),
     TE.map(availablePracticals),
     TE.map(renderAvailablePracticals),
     TE.match((e) => `<h1>Oops</h1>${JSON.stringify(e)}`, renderPage),

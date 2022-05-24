@@ -4,14 +4,16 @@
 // have not been updated yet
 import express, { Application, Request, Response } from 'express';
 import * as E from 'fp-ts/Either';
+import * as RA from 'fp-ts/ReadonlyArray';
 import * as TE from 'fp-ts/TaskEither';
 import { flow, pipe } from 'fp-ts/lib/function';
 import { formatValidationErrors } from 'io-ts-reporters';
+import * as tt from 'io-ts-types';
 import path from 'path';
 import { Database, open } from 'sqlite';
 import sqlite3 from 'sqlite3';
 import { scheduleArbitraryPractical } from './api/schedule-arbitrary-practical';
-import { EventsCodec, arbitraryPracticalScheduled } from './events';
+import { Event, EventCodec, EventsCodec } from './events';
 import { home } from './pages/home';
 import { schedulePractical } from './pages/schedule-practical';
 
@@ -22,14 +24,20 @@ const connectToDatabase = TE.tryCatch(
   () =>
     open({
       filename: '/tmp/database.db',
-      driver: sqlite3.cached.Database,
+      driver: sqlite3.Database,
     }),
-  () => 'failed to connect to database',
+  (e) => {
+    console.log(e);
+    return 'failed to connect to database';
+  },
 );
 
 const createTableIfNecessary = (db: Database) =>
   TE.tryCatch(
-    () => db.exec('CREATE TABLE IF NOT EXISTS events (col FOO)'),
+    () =>
+      db.exec(
+        'CREATE TABLE IF NOT EXISTS events (event_type TEXT, event_payload TEXT)',
+      ),
     (e) => {
       console.log(e);
       return 'failed to create table';
@@ -42,25 +50,53 @@ const getRows = (query: string) => (db: Database) =>
     () => 'failed to get rows',
   );
 
+type EventType = Event['_type'];
+
+const writeEvent =
+  (type: EventType, payload: Record<string, unknown>) => (db: Database) =>
+    TE.tryCatch(
+      () =>
+        db.run('INSERT INTO events (event_type, event_payload) VALUES (?, ?)', [
+          type,
+          JSON.stringify(payload),
+        ]),
+      (e) => `writeEvent failed: ${JSON.stringify(e)}`,
+    );
+
 const adapters = {
   getHistory: pipe(
     connectToDatabase,
     TE.chainFirst(createTableIfNecessary),
-    TE.chain(getRows('SELECT * FROM events')),
+    TE.chain(getRows('SELECT event_payload FROM events')),
     TE.chainEitherKW(
       flow(
-        EventsCodec.decode,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+        RA.map((row) => row.event_payload),
+        E.traverseArray(tt.JsonFromString.decode),
+        E.chain(EventsCodec.decode),
         E.mapLeft(formatValidationErrors),
         E.mapLeft((msgs) => msgs.join('\n')),
       ),
     ),
-    TE.map(() => [
-      arbitraryPracticalScheduled(),
-      arbitraryPracticalScheduled(),
-      arbitraryPracticalScheduled(),
-    ]),
   ),
-  commitEvent: () => TE.right(undefined),
+  commitEvent: (event: Event) =>
+    pipe(
+      connectToDatabase,
+      TE.chainFirst(createTableIfNecessary),
+      TE.map((foo) => {
+        console.log('>>>>>>>>>>>>', EventCodec.encode(event), event);
+        return foo;
+      }),
+      TE.chain(writeEvent(event._type, EventCodec.encode(event))),
+      TE.mapLeft((foo) => {
+        console.log('>>>>>>>>>>>>', foo);
+        return foo;
+      }),
+      TE.map((foo) => {
+        console.log('>>>>>>>>>>>>', foo);
+        return foo;
+      }),
+    ),
 };
 
 app.get('/', async (req: Request, res: Response) => {

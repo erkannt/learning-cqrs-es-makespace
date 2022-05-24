@@ -38,7 +38,8 @@ export const arbitraryPracticalScheduled = () =>
   practicalScheduled(
     arbitraryPracticalId(),
     faker.lorem.words(),
-    Array.from(Array(faker.datatype.number(5)).map(() => arbitraryQuizId())),
+    // Array.from(Array(faker.datatype.number(5)).map(() => arbitraryQuizId())), # Returns null?
+    [arbitraryQuizId()],
     faker.datatype.number({ min: 2, max: 10 }),
     faker.date.future(),
     arbitraryDuration(),

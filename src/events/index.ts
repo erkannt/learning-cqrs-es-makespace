@@ -1,4 +1,5 @@
 import * as t from 'io-ts';
+import * as tt from 'io-ts-types';
 import {
   MemberSignedUpForPractical,
   MemberSignedUpForPracticalCodec,
@@ -7,7 +8,7 @@ import {
   PracticalScheduled,
   PracticalScheduledCodec,
 } from './practical-scheduled';
-import { QuizPassed } from './quiz-passed';
+import { QuizPassed, QuizPassedCodec } from './quiz-passed';
 
 export {
   PracticalScheduled,
@@ -28,6 +29,15 @@ export type Event =
   | PracticalScheduled
   | QuizPassed;
 
-export const EventsCodec = t.readonlyArray(
-  t.union([PracticalScheduledCodec, MemberSignedUpForPracticalCodec]),
+export const EventCodec = t.union([
+  PracticalScheduledCodec,
+  MemberSignedUpForPracticalCodec,
+  QuizPassedCodec,
+]);
+
+export const EventFromStringCodec = tt.JsonFromString.pipe(
+  EventCodec,
+  'EventFromStringCodec',
 );
+
+export const EventsCodec = t.readonlyArray(EventCodec);
