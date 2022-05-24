@@ -3,12 +3,14 @@
 // express 5 changes this but is still in beta and types
 // have not been updated yet
 import express, { Application, Request, Response } from 'express';
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
+import { formatValidationErrors } from 'io-ts-reporters';
 import path from 'path';
 import { Database, open } from 'sqlite';
 import sqlite3 from 'sqlite3';
-import { PracticalScheduledCodec, arbitraryPracticalScheduled } from './events';
+import { EventsCodec, arbitraryPracticalScheduled } from './events';
 import { home } from './pages/home';
 import { schedulePractical } from './pages/schedule-practical';
 
@@ -24,6 +26,15 @@ const connectToDatabase = TE.tryCatch(
   () => 'failed to connect to database',
 );
 
+const createTableIfNecessary = (db: Database) =>
+  TE.tryCatch(
+    () => db.exec('CREATE TABLE IF NOT EXISTS events (col FOO)'),
+    (e) => {
+      console.log(e);
+      return 'failed to create table';
+    },
+  );
+
 const getRows = (query: string) => (db: Database) =>
   TE.tryCatch(
     () => db.all(query),
@@ -33,8 +44,15 @@ const getRows = (query: string) => (db: Database) =>
 const adapters = {
   getHistory: pipe(
     connectToDatabase,
+    TE.chainFirst(createTableIfNecessary),
     TE.chain(getRows('SELECT * FROM events')),
-    TE.chainEitherKW(PracticalScheduledCodec.decode),
+    TE.chainEitherKW(
+      flow(
+        EventsCodec.decode,
+        E.mapLeft(formatValidationErrors),
+        E.mapLeft((msgs) => msgs.join('\n')),
+      ),
+    ),
     TE.map(() => [
       arbitraryPracticalScheduled(),
       arbitraryPracticalScheduled(),

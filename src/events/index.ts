@@ -1,5 +1,12 @@
-import { MemberSignedUpForPractical } from './member-signed-up-for-practical';
-import { PracticalScheduled } from './practical-scheduled';
+import * as t from 'io-ts';
+import {
+  MemberSignedUpForPractical,
+  MemberSignedUpForPracticalCodec,
+} from './member-signed-up-for-practical';
+import {
+  PracticalScheduled,
+  PracticalScheduledCodec,
+} from './practical-scheduled';
 import { QuizPassed } from './quiz-passed';
 
 export {
@@ -20,3 +27,7 @@ export type Event =
   | MemberSignedUpForPractical
   | PracticalScheduled
   | QuizPassed;
+
+export const EventsCodec = t.readonlyArray(
+  t.union([PracticalScheduledCodec, MemberSignedUpForPracticalCodec]),
+);
