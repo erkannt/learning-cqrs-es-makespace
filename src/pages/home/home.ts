@@ -17,7 +17,7 @@ const availablePracticals = (events: ReadonlyArray<PracticalScheduled>) =>
   );
 
 type Ports = {
-  getHistory: TE.TaskEither<string, ReadonlyArray<PracticalScheduled>>;
+  getHistory: TE.TaskEither<unknown, ReadonlyArray<PracticalScheduled>>;
 };
 
 export const home = (ports: Ports) =>
@@ -25,5 +25,5 @@ export const home = (ports: Ports) =>
     ports.getHistory,
     TE.map(availablePracticals),
     TE.map(renderAvailablePracticals),
-    TE.match(() => `Oops`, renderPage),
+    TE.match((e) => `<h1>Oops</h1>${JSON.stringify(e)}`, renderPage),
   );

@@ -6,6 +6,7 @@ export {
   PracticalScheduled,
   practicalScheduled,
   PracticalScheduledCodec,
+  arbitraryPracticalScheduled,
 } from './practical-scheduled';
 
 export {
