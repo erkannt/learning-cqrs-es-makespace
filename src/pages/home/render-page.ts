@@ -5,4 +5,8 @@ export const renderPage = (availabePracticals: string) => `
 	${availabePracticals}
 
 	<a href="schedule-practical">Schedule a new practical</a>
+
+	<form action="/schedule-arbitrary-practical" method="post">
+		<input type="submit" value="Schedule arbitrary practical">
+	</form>
 `;

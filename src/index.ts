@@ -10,6 +10,7 @@ import { formatValidationErrors } from 'io-ts-reporters';
 import path from 'path';
 import { Database, open } from 'sqlite';
 import sqlite3 from 'sqlite3';
+import { scheduleArbitraryPractical } from './api/schedule-arbitrary-practical';
 import { EventsCodec, arbitraryPracticalScheduled } from './events';
 import { home } from './pages/home';
 import { schedulePractical } from './pages/schedule-practical';
@@ -59,6 +60,7 @@ const adapters = {
       arbitraryPracticalScheduled(),
     ]),
   ),
+  commitEvent: () => TE.right(undefined),
 };
 
 app.get('/', async (req: Request, res: Response) => {
@@ -68,6 +70,14 @@ app.get('/', async (req: Request, res: Response) => {
 app.get('/schedule-practical', (req: Request, res: Response) => {
   res.status(200).send(schedulePractical);
 });
+
+app.post(
+  '/schedule-arbitrary-practical',
+  async (req: Request, res: Response) => {
+    await scheduleArbitraryPractical(adapters)();
+    res.redirect('back');
+  },
+);
 
 app.use('/static', express.static(path.resolve(__dirname, './static')));
 
