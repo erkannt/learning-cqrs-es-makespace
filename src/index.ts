@@ -24,7 +24,7 @@ const connectToDatabase = TE.tryCatch(
   () =>
     open({
       filename: '/tmp/database.db',
-      driver: sqlite3.Database,
+      driver: sqlite3.cached.Database,
     }),
   (e) => {
     console.log(e);
@@ -87,6 +87,10 @@ const adapters = {
       connectToDatabase,
       TE.chainFirst(createTableIfNecessary),
       TE.chain(writeEvent(event._type, EventCodec.encode(event))),
+      TE.mapLeft((e) => {
+        console.log('ERROR: commitEvent', e);
+        return e;
+      }),
     ),
 };
 
