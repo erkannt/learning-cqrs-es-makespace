@@ -101,8 +101,13 @@ app.get('/schedule-practical', (req: Request, res: Response) => {
 app.post(
   '/schedule-arbitrary-practical',
   async (req: Request, res: Response) => {
-    await scheduleArbitraryPractical(adapters)();
-    res.redirect('back');
+    await pipe(
+      scheduleArbitraryPractical(adapters),
+      TE.match(
+        (e) => res.status(500).send(e),
+        () => res.redirect('back'),
+      ),
+    )();
   },
 );
 
