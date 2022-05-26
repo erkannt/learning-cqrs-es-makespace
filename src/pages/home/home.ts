@@ -29,6 +29,9 @@ export const home = (ports: Ports) =>
     ports.getHistory,
     TE.map(RA.filter(PracticalScheduledCodec.is)),
     TE.map(availablePracticals),
-    TE.map(renderAvailablePracticals),
+    TE.map((practicals) => ({
+      listOfPracticals: renderAvailablePracticals(practicals),
+      count: practicals.length,
+    })),
     TE.match((e) => `<h1>Oops</h1>${JSON.stringify(e)}`, renderPage),
   );
