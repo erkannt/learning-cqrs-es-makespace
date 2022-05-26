@@ -47,7 +47,10 @@ const createTableIfNecessary = (db: Database) =>
 const getRows = (query: string) => (db: Database) =>
   TE.tryCatch(
     () => db.all(query),
-    () => 'failed to get rows',
+    (e) => {
+      console.log(e);
+      return 'failed to get rows';
+    },
   );
 
 type EventType = Event['_type'];
@@ -83,19 +86,7 @@ const adapters = {
     pipe(
       connectToDatabase,
       TE.chainFirst(createTableIfNecessary),
-      TE.map((foo) => {
-        console.log('>>>>>>>>>>>>', EventCodec.encode(event), event);
-        return foo;
-      }),
       TE.chain(writeEvent(event._type, EventCodec.encode(event))),
-      TE.mapLeft((foo) => {
-        console.log('>>>>>>>>>>>>', foo);
-        return foo;
-      }),
-      TE.map((foo) => {
-        console.log('>>>>>>>>>>>>', foo);
-        return foo;
-      }),
     ),
 };
 
