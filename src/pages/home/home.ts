@@ -27,11 +27,18 @@ type Ports = {
 export const home = (ports: Ports) =>
   pipe(
     ports.getHistory,
-    TE.map(RA.filter(PracticalScheduledCodec.is)),
-    TE.map(availablePracticals),
-    TE.map((practicals) => ({
+    TE.map((events) => ({
+      eventCount: events.length,
+      practicals: pipe(
+        events,
+        RA.filter(PracticalScheduledCodec.is),
+        availablePracticals,
+      ),
+    })),
+    TE.map(({ eventCount, practicals }) => ({
       listOfPracticals: renderAvailablePracticals(practicals),
-      count: practicals.length,
+      practicalCount: practicals.length,
+      eventCount,
     })),
     TE.match((e) => `<h1>Oops</h1>${JSON.stringify(e)}`, renderPage),
   );

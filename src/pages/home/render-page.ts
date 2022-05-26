@@ -1,11 +1,14 @@
 type ViewModel = {
   listOfPracticals: string;
-  count: number;
+  practicalCount: number;
+  eventCount: number;
 };
 export const renderPage = (viewModel: ViewModel) => `
 	<h1>Makespace Practicals</h1>
 
-	<h2>${viewModel.count} Available Practicals</h2>
+	<p>${viewModel.eventCount} events in database</p>
+
+	<h2>${viewModel.practicalCount} Available Practicals</h2>
 	<form action="/schedule-arbitrary-practical" method="post">
 		<input type="submit" value="Schedule arbitrary practical">
 	</form>
