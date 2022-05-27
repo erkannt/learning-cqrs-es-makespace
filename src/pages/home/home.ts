@@ -1,4 +1,5 @@
 import * as RA from 'fp-ts/ReadonlyArray';
+import * as T from 'fp-ts/Task';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/lib/function';
 import {
@@ -24,7 +25,7 @@ type Ports = {
   getHistory: TE.TaskEither<unknown, ReadonlyArray<Event>>;
 };
 
-export const home = (ports: Ports) =>
+export const home = (ports: Ports): T.Task<string> =>
   pipe(
     ports.getHistory,
     TE.map((events) => ({

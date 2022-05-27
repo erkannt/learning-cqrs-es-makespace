@@ -11,6 +11,7 @@
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": ["error"],
     "@typescript-eslint/unbound-method": "off",
     "no-unused-vars": "off",
     "unused-imports/no-unused-imports": "warn",

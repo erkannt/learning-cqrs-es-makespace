@@ -17,7 +17,7 @@ import { SchedulePractical } from './schedule-practical';
 
 type PracticalCommand = SchedulePractical | JoinPractical;
 
-type PracticalEvent = PracticalScheduled | MemberSignedUpForPractical;
+export type PracticalEvent = PracticalScheduled | MemberSignedUpForPractical;
 
 export type Practical = (
   history: ReadonlyArray<Event>,

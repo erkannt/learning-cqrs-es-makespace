@@ -3,10 +3,11 @@ import { pipe } from 'fp-ts/lib/function';
 import { Event } from '../events';
 import { hasPassedRequiredQuizzes } from './has-passed-required-quizzes';
 import { JoinPractical } from './join-practical';
-import { practical } from './practical';
+import { PracticalEvent, practical } from './practical';
 
 export const commandHandler =
-  (history: ReadonlyArray<Event>) => (command: JoinPractical) =>
+  (history: ReadonlyArray<Event>) =>
+  (command: JoinPractical): E.Either<unknown, ReadonlyArray<PracticalEvent>> =>
     pipe(
       command,
       E.right,

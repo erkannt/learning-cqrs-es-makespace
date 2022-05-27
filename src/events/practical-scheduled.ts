@@ -34,7 +34,7 @@ export const practicalScheduled = (
   duration,
 });
 
-export const arbitraryPracticalScheduled = () =>
+export const arbitraryPracticalScheduled = (): PracticalScheduled =>
   practicalScheduled(
     arbitraryPracticalId(),
     faker.lorem.words(),

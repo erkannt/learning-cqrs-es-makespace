@@ -3,7 +3,7 @@ type ViewModel = {
   practicalCount: number;
   eventCount: number;
 };
-export const renderPage = (viewModel: ViewModel) => `
+export const renderPage = (viewModel: ViewModel): string => `
 	<h1>Makespace Practicals</h1>
 
 	<p>${viewModel.eventCount} events in database</p>

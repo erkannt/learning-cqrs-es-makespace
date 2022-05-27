@@ -6,5 +6,7 @@ type Ports = {
   commitEvent: (event: Event) => TE.TaskEither<unknown, unknown>;
 };
 
-export const scheduleArbitraryPractical = (ports: Ports) =>
+export const scheduleArbitraryPractical = (
+  ports: Ports,
+): TE.TaskEither<unknown, unknown> =>
   pipe(arbitraryPracticalScheduled(), ports.commitEvent);

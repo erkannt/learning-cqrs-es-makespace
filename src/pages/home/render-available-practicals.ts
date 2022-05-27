@@ -12,7 +12,7 @@ type PracticalViewModel = {
 
 export const renderAvailablePracticals = (
   practicals: ReadonlyArray<PracticalViewModel>,
-) =>
+): string =>
   pipe(
     practicals,
     RA.map(

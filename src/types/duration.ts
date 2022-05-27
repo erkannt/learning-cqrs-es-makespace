@@ -32,7 +32,7 @@ export const DurationCodec = t.type({
 
 export type Duration = t.TypeOf<typeof DurationCodec>;
 
-export const arbitraryDuration = () => ({
+export const arbitraryDuration = (): Duration => ({
   hours: faker.datatype.number(24) as Hours,
   minutes: faker.datatype.number(60) as Minutes,
 });
