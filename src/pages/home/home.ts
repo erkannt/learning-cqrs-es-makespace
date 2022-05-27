@@ -36,7 +36,11 @@ export const home = (ports: Ports) =>
       ),
     })),
     TE.map(({ eventCount, practicals }) => ({
-      listOfPracticals: renderAvailablePracticals(practicals),
+      listOfPracticals: pipe(
+        practicals,
+        RA.takeLeft(10),
+        renderAvailablePracticals,
+      ),
       practicalCount: practicals.length,
       eventCount,
     })),
