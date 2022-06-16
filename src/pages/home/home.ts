@@ -29,21 +29,19 @@ export const home = (ports: Ports): T.Task<string> =>
   pipe(
     ports.getHistory,
     TE.map((events) => ({
-      eventCount: events.length,
       practicals: pipe(
         events,
         RA.filter(PracticalScheduledCodec.is),
         availablePracticals,
       ),
     })),
-    TE.map(({ eventCount, practicals }) => ({
+    TE.map(({ practicals }) => ({
       listOfPracticals: pipe(
         practicals,
         RA.takeLeft(10),
         renderAvailablePracticals,
       ),
       practicalCount: practicals.length,
-      eventCount,
     })),
     TE.match((e) => `<h1>Oops</h1>${JSON.stringify(e)}`, renderPage),
   );
