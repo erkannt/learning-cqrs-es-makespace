@@ -6,45 +6,17 @@ import express, { Application, Request, Response } from 'express';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/lib/function';
 import path from 'path';
-import { Database } from 'sqlite';
-import {
-  connectToDatabase,
-  createGetHistory,
-  createTableIfNecessary,
-} from './adapters';
+import { createCommitEvent, createGetHistory } from './adapters';
 import { scheduleArbitraryPractical } from './api/schedule-arbitrary-practical';
-import { Event, EventCodec } from './events';
 import { home } from './pages/home';
 import { schedulePractical } from './pages/schedule-practical';
 
 const app: Application = express();
 const port = 8080;
 
-type EventType = Event['_type'];
-
-const writeEvent =
-  (type: EventType, payload: Record<string, unknown>) => (db: Database) =>
-    TE.tryCatch(
-      () =>
-        db.run('INSERT INTO events (event_type, event_payload) VALUES (?, ?)', [
-          type,
-          JSON.stringify(payload),
-        ]),
-      (e) => `writeEvent failed: ${JSON.stringify(e)}`,
-    );
-
 const adapters = {
   getHistory: createGetHistory(),
-  commitEvent: (event: Event) =>
-    pipe(
-      connectToDatabase,
-      TE.chainFirst(createTableIfNecessary),
-      TE.chain(writeEvent(event._type, EventCodec.encode(event))),
-      TE.mapLeft((e) => {
-        console.log('ERROR: commitEvent', e);
-        return e;
-      }),
-    ),
+  commitEvent: createCommitEvent(),
 };
 
 app.get('/', async (req: Request, res: Response) => {

@@ -1,2 +1,2 @@
 export { createGetHistory } from './create-get-history';
-export { connectToDatabase, createTableIfNecessary } from './database';
+export { createCommitEvent } from './create-commit-event';
