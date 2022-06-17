@@ -2,10 +2,11 @@ import * as E from 'fp-ts/Either';
 import * as RA from 'fp-ts/ReadonlyArray';
 import * as TE from 'fp-ts/TaskEither';
 import { flow, pipe } from 'fp-ts/lib/function';
+import * as t from 'io-ts';
 import { formatValidationErrors } from 'io-ts-reporters';
 import * as tt from 'io-ts-types';
 import { Database } from 'sqlite';
-import { Event, EventsCodec } from '../events';
+import { Event, EventCodec } from '../events';
 import { connectToDatabase, createTableIfNecessary } from './database';
 
 const getRows = (query: string) => (db: Database) =>
@@ -17,6 +18,16 @@ const getRows = (query: string) => (db: Database) =>
     },
   );
 
+const JsonFromUnknown = t.string.pipe(tt.JsonFromString);
+
+const EventFromEncodedJson = JsonFromUnknown.pipe(EventCodec);
+
+const EventsTableCodec = t.readonlyArray(
+  t.type({
+    event_payload: EventFromEncodedJson,
+  }),
+);
+
 export const createGetHistory = (): TE.TaskEither<
   unknown,
   ReadonlyArray<Event>
@@ -27,12 +38,10 @@ export const createGetHistory = (): TE.TaskEither<
     TE.chain(getRows('SELECT event_payload FROM events')),
     TE.chainEitherKW(
       flow(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
-        RA.map((row) => row.event_payload),
-        E.traverseArray(tt.JsonFromString.decode),
-        E.chain(EventsCodec.decode),
+        EventsTableCodec.decode,
         E.mapLeft(formatValidationErrors),
         E.mapLeft((msgs) => msgs.join('\n')),
       ),
     ),
+    TE.map(RA.map((row) => row.event_payload)),
   );

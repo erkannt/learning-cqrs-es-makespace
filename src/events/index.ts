@@ -1,5 +1,4 @@
 import * as t from 'io-ts';
-import * as tt from 'io-ts-types';
 import {
   MemberSignedUpForPractical,
   MemberSignedUpForPracticalCodec,
@@ -34,10 +33,3 @@ export const EventCodec = t.union([
   MemberSignedUpForPracticalCodec,
   QuizPassedCodec,
 ]);
-
-export const EventFromStringCodec = tt.JsonFromString.pipe(
-  EventCodec,
-  'EventFromStringCodec',
-);
-
-export const EventsCodec = t.readonlyArray(EventCodec);
