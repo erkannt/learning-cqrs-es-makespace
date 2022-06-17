@@ -1,7 +1,12 @@
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
+import { flow, pipe } from 'fp-ts/lib/function';
+import * as t from 'io-ts';
+import { formatValidationErrors } from 'io-ts-reporters';
+import * as tt from 'io-ts-types';
 import { Database, open } from 'sqlite';
 import sqlite3 from 'sqlite3';
-import { Event } from '../events';
+import { Event, EventCodec } from '../events';
 
 export const connectToDatabase = TE.tryCatch(
   () =>
@@ -42,3 +47,39 @@ export const writeEvent =
         ]),
       (e) => `writeEvent failed: ${JSON.stringify(e)}`,
     );
+
+const getRows = (query: string) => (db: Database) =>
+  TE.tryCatch(
+    () => db.all(query),
+    (e) => {
+      console.log(e);
+      return 'failed to get rows';
+    },
+  );
+
+const JsonFromUnknown = t.string.pipe(tt.JsonFromString);
+
+const EventFromEncodedJson = JsonFromUnknown.pipe(EventCodec);
+
+const EventsTableCodec = t.readonlyArray(
+  t.type({
+    event_payload: EventFromEncodedJson,
+  }),
+);
+
+type EventRows = t.TypeOf<typeof EventsTableCodec>;
+
+export const getAllEventRows = (
+  db: Database,
+): TE.TaskEither<string, EventRows> =>
+  pipe(
+    db,
+    getRows('SELECT event_payload FROM events'),
+    TE.chainEitherKW(
+      flow(
+        EventsTableCodec.decode,
+        E.mapLeft(formatValidationErrors),
+        E.mapLeft((msgs) => msgs.join('\n')),
+      ),
+    ),
+  );
