@@ -26,7 +26,11 @@ export const createTableIfNecessary = (
   TE.tryCatch(
     () =>
       db.exec(
-        'CREATE TABLE IF NOT EXISTS events (event_type TEXT, event_payload TEXT)',
+        `CREATE TABLE IF NOT EXISTS events (
+          event_type TEXT,
+          event_payload TEXT,
+          timestamp TIMESTAMP DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')) NOT NULL
+        )`,
       ),
     (e) => {
       console.log(e);
@@ -64,6 +68,7 @@ const EventFromEncodedJson = JsonFromUnknown.pipe(EventCodec);
 const EventsTableCodec = t.readonlyArray(
   t.type({
     event_payload: EventFromEncodedJson,
+    timestamp: tt.DateFromISOString,
   }),
 );
 
@@ -74,7 +79,7 @@ export const getAllEventRows = (
 ): TE.TaskEither<string, EventRows> =>
   pipe(
     db,
-    getRows('SELECT event_payload FROM events'),
+    getRows('SELECT event_payload, timestamp FROM events'),
     TE.chainEitherKW(
       flow(
         EventsTableCodec.decode,
