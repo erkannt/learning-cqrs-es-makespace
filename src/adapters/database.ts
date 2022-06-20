@@ -72,7 +72,7 @@ const EventsTableCodec = t.readonlyArray(
   }),
 );
 
-type EventRows = t.TypeOf<typeof EventsTableCodec>;
+export type EventRows = t.TypeOf<typeof EventsTableCodec>;
 
 export const getAllEventRows = (
   db: Database,
