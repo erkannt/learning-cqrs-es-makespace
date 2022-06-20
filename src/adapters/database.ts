@@ -88,3 +88,20 @@ export const getAllEventRows = (
       ),
     ),
   );
+
+export const getAllEventRowsSince =
+  (since: Date) =>
+  (db: Database): TE.TaskEither<string, EventRows> =>
+    pipe(
+      db,
+      getRows(
+        `SELECT event_payload, timestamp FROM events WHERE timestamp > '${since.toISOString()}'`,
+      ),
+      TE.chainEitherKW(
+        flow(
+          EventsTableCodec.decode,
+          E.mapLeft(formatValidationErrors),
+          E.mapLeft((msgs) => msgs.join('\n')),
+        ),
+      ),
+    );
