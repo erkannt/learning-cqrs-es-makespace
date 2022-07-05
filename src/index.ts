@@ -12,6 +12,7 @@ import { home } from './pages/home';
 import { schedulePractical as schedulePracticalPage } from './pages/schedule-practical';
 
 const app: Application = express();
+app.use(express.urlencoded({ extended: true }));
 const port = 8080;
 
 const adapters = {
@@ -29,6 +30,7 @@ app.get('/schedule-practical', (req: Request, res: Response) => {
 
 app.post('/schedule-practical', async (req: Request, res: Response) => {
   await pipe(
+    req.body,
     schedulePractical(),
     TE.match(
       (e) => res.status(500).send(e),
