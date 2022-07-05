@@ -13,6 +13,9 @@ export const schedulePractical = `
 
 		<form action="" method="post">
 			<fieldset>
+				<label for="title">Title of Practical</label>
+				<input type="text" name="title">
+
 				<label for="date">Date and Time:</label>
 				<input type="datetime-local" name="date">
 

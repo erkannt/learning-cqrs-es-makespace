@@ -7,9 +7,9 @@ import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/lib/function';
 import path from 'path';
 import { createCommitEvent, createGetHistory } from './adapters';
-import { scheduleArbitraryPractical } from './api/schedule-arbitrary-practical';
+import { scheduleArbitraryPractical, schedulePractical } from './api';
 import { home } from './pages/home';
-import { schedulePractical } from './pages/schedule-practical';
+import { schedulePractical as schedulePracticalPage } from './pages/schedule-practical';
 
 const app: Application = express();
 const port = 8080;
@@ -24,7 +24,17 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.get('/schedule-practical', (req: Request, res: Response) => {
-  res.status(200).send(schedulePractical);
+  res.status(200).send(schedulePracticalPage);
+});
+
+app.post('/schedule-practical', async (req: Request, res: Response) => {
+  await pipe(
+    schedulePractical(),
+    TE.match(
+      (e) => res.status(500).send(e),
+      (r) => res.status(200).send(r),
+    ),
+  )();
 });
 
 app.post(
