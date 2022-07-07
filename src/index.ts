@@ -3,6 +3,7 @@
 // express 5 changes this but is still in beta and types
 // have not been updated yet
 import express, { Application, Request, Response } from 'express';
+import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import { pipe } from 'fp-ts/lib/function';
 import path from 'path';
@@ -13,6 +14,7 @@ import { schedulePractical as schedulePracticalPage } from './pages/schedule-pra
 
 const app: Application = express();
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 const port = 8080;
 
 const adapters = {
@@ -25,7 +27,14 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.get('/schedule-practical', (req: Request, res: Response) => {
-  res.status(200).send(schedulePracticalPage);
+  pipe(
+    req.query,
+    schedulePracticalPage,
+    E.match(
+      (e) => res.status(500).send(e),
+      (r) => res.status(200).send(r),
+    ),
+  );
 });
 
 app.post('/schedule-practical', async (req: Request, res: Response) => {
