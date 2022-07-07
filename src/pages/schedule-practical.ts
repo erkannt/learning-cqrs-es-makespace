@@ -10,6 +10,7 @@ const paramsCodec = t.type({
   title: tt.withFallback(t.string, ''),
   capacity: tt.withFallback(tt.NumberFromString, 5),
   date: tt.withFallback(tt.DateFromISOString, new Date()),
+  page: tt.withFallback(tt.NumberFromString, 1),
 });
 
 type Params = t.TypeOf<typeof paramsCodec>;
@@ -39,23 +40,41 @@ export const schedulePractical = (params: unknown): E.Either<unknown, string> =>
     E.map(renderPage),
   );
 
-const renderForm = (params: Params) => `
-	<form action="" method="post">
-		<fieldset>
-			<label for="title">Title of Practical</label>
-			<input type="text" name="title" value="${params.title}">
+const renderForm = (params: Params) => {
+  switch (params.page) {
+    case 1:
+      return `
+			<form action="" method="get">
+				<fieldset>
+					<label for="title">Title of Practical</label>
+					<input type="text" name="title" value="${params.title}">
 
-			<label for="date">Date and Time:</label>
-			<input type="datetime-local" name="date" value=${params.date.toISOString()}>
+					<input type="hidden" name="page" value="${params.page + 1}">
+					<input type="submit" value="Next">
+				</fieldset>
+			</form>
+		`;
+    case 2:
+      return `
+			<form action="" method="post">
+				<fieldset>
+					<input type="hidden" name="title" value="${params.title}">
 
-			<label for="capacity">Capacity</label>
-			<input type="number" name="capacity" value="${params.capacity}">
+					<label for="date">Date and Time:</label>
+					<input type="datetime-local" name="date" value=${params.date.toISOString()}>
 
-			<label for="requiredQuizzes[]">Required Quizzes</label>
-			<input type="text" name="requiredQuizzes[]">
-			<input type="text" name="requiredQuizzes[]">
+					<label for="capacity">Capacity</label>
+					<input type="number" name="capacity" value="${params.capacity}">
 
-			<input type="submit" value="Schedule the practical">
-		</fieldset>
-	</form>
-`;
+					<label for="requiredQuizzes[]">Required Quizzes</label>
+					<input type="text" name="requiredQuizzes[]">
+					<input type="text" name="requiredQuizzes[]">
+
+					<input type="submit" value="Schedule the practical">
+				</fieldset>
+			</form>
+			`;
+    default:
+      return 'Ooops';
+  }
+};
